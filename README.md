@@ -2,6 +2,8 @@
 
 Отдельный статический сайт бесплатной Windows-версии [BAIagent Director](https://baiagent.ru/free/). Это не третий desktop-агент: сайт объясняет бесплатный продукт, ведёт к установщику и позволяет запросить необязательную поддержку.
 
+[Исходный код этой страницы](https://github.com/Balanov/baiagent-free) · [Репозиторий Director](https://github.com/Balanov/baiagent-director) · [Релиз Director 0.8.1](https://github.com/Balanov/baiagent-director/releases/tag/0.8.1)
+
 ## Что на странице
 
 - Скачивание Director 0.8.1 для Windows за 0 ₽.
