@@ -1,12 +1,12 @@
-# BAIagent Director — бесплатная загрузка
+# BAIagent — ИИ-советник — бесплатная загрузка
 
-Отдельный статический сайт бесплатной Windows-версии [BAIagent Director](https://baiagent.ru/free/). Это не третий desktop-агент: сайт объясняет бесплатный продукт, ведёт к установщику и позволяет запросить необязательную поддержку.
+Отдельный статический сайт бесплатной Windows-версии [BAIagent — ИИ-советник](https://baiagent.ru/free/). Это не третий desktop-агент: сайт объясняет бесплатный продукт, ведёт к установщику и позволяет запросить необязательную поддержку.
 
-[Исходный код этой страницы](https://github.com/Balanov/baiagent-free) · [Репозиторий Director](https://github.com/Balanov/baiagent-director) · [Релиз Director 0.8.1](https://github.com/Balanov/baiagent-director/releases/tag/0.8.1)
+[Исходный код этой страницы](https://github.com/Balanov/baiagent-free) · [Репозиторий ИИ-советника](https://github.com/Balanov/baiagent-director) · [Релиз ИИ-советника 1.2.0](https://github.com/Balanov/baiagent-director/releases/tag/v1.2.0)
 
 ## Что на странице
 
-- Скачивание Director 0.8.1 для Windows за 0 ₽.
+- Скачивание ИИ-советника 1.2.0 для Windows за 0 ₽.
 - Переход к веб-аудиту компании.
 - Честное разграничение веб-версии и локального приложения.
 - Описание локальных документов, диалога и необходимости интернета для свежих исследований.

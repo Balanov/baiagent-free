@@ -12,7 +12,7 @@ try {
   const call = async (action, args) => {
     const response = await fetch('http://127.0.0.1:10086/command', {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action, args, session: 'svoi-release' }),
+      body: JSON.stringify({ action, args, session: 'free-preview-120' }),
     });
     const data = await response.json();
     if (!data.ok && action !== 'find_tab') throw new Error(`${action}: ${JSON.stringify(data)}`);
@@ -25,7 +25,7 @@ try {
     await call('cdp', { method: 'Emulation.setDeviceMetricsOverride', params: { width, height, deviceScaleFactor: 1, mobile: width < 600 } });
     const result = await call('evaluate', { code: "(() => ({title:document.title,download:document.querySelector('.hero-actions .button-primary')?.href,logosLoaded:[...document.images].every(image=>image.complete&&image.naturalWidth>0),oldNaming:document.body.innerText.toLowerCase().includes('рентген'),overflow:document.documentElement.scrollWidth>window.innerWidth,viewport:window.innerWidth,scrollWidth:document.documentElement.scrollWidth}))()" });
     const page = typeof result.value === 'string' ? JSON.parse(result.value) : result.value;
-    assert.equal(new URL(page.download).pathname, '/xray/downloads/BAIagent-Director-Setup-Windows-0.8.1-x64.exe');
+    assert.equal(new URL(page.download).pathname, '/xray/downloads/BAIagent-Director-Setup-Windows-1.2.0-x64.exe');
     assert.equal(page.logosLoaded, true, `${name}: логотипы должны загружаться`);
     assert.equal(page.oldNaming, false);
     assert.equal(page.overflow, false, `${name}: горизонтальное переполнение ${page.scrollWidth} > ${page.viewport}`);

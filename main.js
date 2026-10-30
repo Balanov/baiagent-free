@@ -11,7 +11,7 @@ document.querySelector('.lead-form').addEventListener('submit', async (event) =>
     const result = await response.json();
     if (!response.ok || !result.success) throw new Error(result.message || 'Ошибка отправки');
     status.classList.add('is-success');
-    status.textContent = 'Заявка отправлена. Мы свяжемся с вами, чтобы обсудить поддержку Director.';
+    status.textContent = 'Заявка отправлена. Мы свяжемся с вами, чтобы обсудить поддержку советника.';
     form.reset();
   } catch (error) {
     status.classList.add('is-error');
