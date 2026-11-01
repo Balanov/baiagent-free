@@ -2,11 +2,11 @@
 
 Отдельный статический сайт бесплатной Windows-версии [BAIagent — ИИ-советник](https://baiagent.ru/free/). Это не третий desktop-агент: сайт объясняет бесплатный продукт, ведёт к установщику и позволяет запросить необязательную поддержку.
 
-[Исходный код этой страницы](https://github.com/Balanov/baiagent-free) · [Репозиторий ИИ-советника](https://github.com/Balanov/baiagent-director) · [Релиз ИИ-советника 1.2.0](https://github.com/Balanov/baiagent-director/releases/tag/v1.2.0)
+[Исходный код этой страницы](https://github.com/Balanov/baiagent-free) · [Репозиторий ИИ-советника](https://github.com/Balanov/baiagent-director) · [Релиз ИИ-советника 1.3.0](https://github.com/Balanov/baiagent-director/releases/tag/v1.3.0)
 
 ## Что на странице
 
-- Скачивание ИИ-советника 1.2.0 для Windows за 0 ₽.
+- Скачивание ИИ-советника 1.3.0 для Windows за 0 ₽.
 - Переход к веб-аудиту компании.
 - Честное разграничение веб-версии и локального приложения.
 - Описание локальных документов, диалога и необходимости интернета для свежих исследований.

@@ -25,7 +25,7 @@ try {
     await call('cdp', { method: 'Emulation.setDeviceMetricsOverride', params: { width, height, deviceScaleFactor: 1, mobile: width < 600 } });
     const result = await call('evaluate', { code: "(() => ({title:document.title,download:document.querySelector('.hero-actions .button-primary')?.href,logosLoaded:[...document.images].every(image=>image.complete&&image.naturalWidth>0),oldNaming:document.body.innerText.toLowerCase().includes('рентген'),overflow:document.documentElement.scrollWidth>window.innerWidth,viewport:window.innerWidth,scrollWidth:document.documentElement.scrollWidth}))()" });
     const page = typeof result.value === 'string' ? JSON.parse(result.value) : result.value;
-    assert.equal(new URL(page.download).pathname, '/xray/downloads/BAIagent-Director-Setup-Windows-1.2.0-x64.exe');
+    assert.equal(new URL(page.download).pathname, '/xray/downloads/BAIagent-Director-Setup-Windows-1.3.0-x64.exe');
     assert.equal(page.logosLoaded, true, `${name}: логотипы должны загружаться`);
     assert.equal(page.oldNaming, false);
     assert.equal(page.overflow, false, `${name}: горизонтальное переполнение ${page.scrollWidth} > ${page.viewport}`);
