@@ -336,6 +336,7 @@ const zh = {
 
 const translations = { en, de, fr, es, zh };
 const languageNames = { ru: 'Русский', en: 'English', de: 'Deutsch', fr: 'Français', es: 'Español', zh: '中文' };
+const localeByLanguage = { ru: 'ru-RU', en: 'en-US', de: 'de-DE', fr: 'fr-FR', es: 'es-ES', zh: 'zh-CN' };
 const currencyByLanguage = { ru: 'RUB', en: 'USD', de: 'EUR', fr: 'EUR', es: 'EUR', zh: 'CNY' };
 const currencyByRegion = {
   RU: 'RUB', BY: 'BYN', KZ: 'KZT', UA: 'UAH', US: 'USD', GB: 'GBP', CA: 'CAD', AU: 'AUD', NZ: 'NZD',
@@ -371,7 +372,8 @@ function regionOf(locale) {
 }
 function detectCurrency(locale, language) {
   const region = regionOf(locale);
-  return currencyByRegion[region] || currencyByLanguage[language] || 'USD';
+  if (supportedLanguage(locale) === language && currencyByRegion[region]) return currencyByRegion[region];
+  return currencyByLanguage[language] || currencyByRegion[region] || 'USD';
 }
 function money(value, currency = currentCurrency, approximate = false) {
   let formatted;
@@ -434,8 +436,11 @@ function addControls() {
   header.insertBefore(label, header.querySelector('.header-cta'));
   label.querySelector('select').addEventListener('change', event => {
     currentLanguage = event.target.value;
+    currentLocale = localeByLanguage[currentLanguage] || currentLocale;
+    currentCurrency = detectCurrency(currentLocale, currentLanguage);
     try { localStorage.setItem('baiagent-language', currentLanguage); } catch {}
     applyTranslations();
+    loadRates();
   });
   priceNote = document.createElement('small');
   priceNote.className = 'support-price-note';
@@ -445,8 +450,10 @@ function addControls() {
 function initialise() {
   let saved = null;
   try { saved = localStorage.getItem('baiagent-language'); } catch {}
-  currentLocale = browserLocale();
-  currentLanguage = saved && languageNames[saved] ? saved : supportedLanguage(currentLocale);
+  const detectedLocale = browserLocale();
+  const detectedLanguage = supportedLanguage(detectedLocale);
+  currentLanguage = saved && languageNames[saved] ? saved : detectedLanguage;
+  currentLocale = currentLanguage === detectedLanguage ? detectedLocale : (localeByLanguage[currentLanguage] || detectedLocale);
   currentCurrency = detectCurrency(currentLocale, currentLanguage);
   addControls();
   applyTranslations();

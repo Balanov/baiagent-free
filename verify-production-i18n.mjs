@@ -67,6 +67,24 @@ try {
       console.log(JSON.stringify({ locale, viewport, language, currency, support: page.support, overflow: false }));
     }
   }
+  await evaluate("(() => { localStorage.setItem('__test_locale', 'ru-RU'); localStorage.removeItem('baiagent-language'); return true; })()");
+  await call('cdp', { method: 'Page.reload', params: { ignoreCache: true } });
+  await new Promise(resolve => setTimeout(resolve, 900));
+  await evaluate("(() => { document.querySelector('#language-select').value = 'zh'; document.querySelector('#language-select').dispatchEvent(new Event('change', {bubbles:true})); return true; })()");
+  const readManual = "() => ({lang:document.documentElement.lang,currency:window.baiagentI18n?.currency,heading:document.querySelector('h1')?.innerText,saved:localStorage.getItem('baiagent-language')})";
+  const manual = await evaluate(`(${readManual})()`);
+  assert.equal(manual.lang, 'zh');
+  assert.equal(manual.currency, 'CNY');
+  assert.equal(manual.saved, 'zh');
+  assert.ok(manual.heading.includes('您的企业。'));
+  assert.ok(manual.heading.includes('¥'));
+  assert.ok(!manual.heading.includes('₽'));
+  await call('cdp', { method: 'Page.reload', params: { ignoreCache: true } });
+  await new Promise(resolve => setTimeout(resolve, 900));
+  const reloaded = await evaluate(`(${readManual})()`);
+  assert.deepEqual(reloaded, manual, 'На боевой странице CNY должен сохраниться после перезагрузки');
+  await call('screenshot', { format: 'png', path: path.join(output, 'production-i18n-zh-manual-reloaded.png') });
+  results.push({ locale: 'ru-RU→zh→reload', viewport: 'desktop', ...reloaded });
   const scriptId = injected?.identifier || injected?.result?.identifier;
   if (scriptId) await call('cdp', { method: 'Page.removeScriptToEvaluateOnNewDocument', params: { identifier: scriptId } });
   await evaluate("(() => { localStorage.removeItem('baiagent-language'); localStorage.removeItem('__test_locale'); return true; })()");

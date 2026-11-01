@@ -19,7 +19,8 @@ const call = async (action, args) => {
 };
 const evaluate = async code => {
   const result = await call('evaluate', { code });
-  return typeof result.value === 'string' ? JSON.parse(result.value) : result.value;
+  if (typeof result.value !== 'string') return result.value;
+  try { return JSON.parse(result.value); } catch { return result.value; }
 };
 try {
   await server.listen();
@@ -80,9 +81,26 @@ try {
       console.log(JSON.stringify({ locale, viewport, language, currency, support: page.support, overflow: false }));
     }
   }
-  await evaluate("(() => { document.querySelector('#language-select').value = 'de'; document.querySelector('#language-select').dispatchEvent(new Event('change', {bubbles:true})); return {lang:document.documentElement.lang,saved:localStorage.getItem('baiagent-language')}; })()");
-  const manual = await evaluate("(() => ({lang:document.documentElement.lang,saved:localStorage.getItem('baiagent-language')}))()");
-  assert.deepEqual(manual, { lang: 'de', saved: 'de' });
+  await evaluate("(() => { localStorage.setItem('__test_locale', 'ru-RU'); localStorage.removeItem('baiagent-language'); return true; })()");
+  await call('cdp', { method: 'Page.reload', params: { ignoreCache: true } });
+  await new Promise(resolve => setTimeout(resolve, 650));
+  await evaluate("(() => { document.querySelector('#language-select').value = 'zh'; document.querySelector('#language-select').dispatchEvent(new Event('change', {bubbles:true})); return true; })()");
+  const readManual = "() => ({lang:document.documentElement.lang,currency:window.baiagentI18n?.currency,heading:document.querySelector('h1')?.innerText,saved:localStorage.getItem('baiagent-language')})";
+  const manual = await evaluate(`(${readManual})()`);
+  assert.equal(manual.lang, 'zh');
+  assert.equal(manual.currency, 'CNY');
+  assert.equal(manual.saved, 'zh');
+  assert.ok(manual.heading.includes('您的企业。'));
+  assert.ok(manual.heading.includes('¥'));
+  assert.ok(!manual.heading.includes('₽'));
+  await call('cdp', { method: 'Page.reload', params: { ignoreCache: true } });
+  await new Promise(resolve => setTimeout(resolve, 650));
+  const reloaded = await evaluate(`(${readManual})()`);
+  assert.deepEqual(reloaded, manual, 'Китайский язык и CNY должны сохраниться после перезагрузки в ru-RU браузере');
+  await evaluate("(() => { localStorage.setItem('__test_locale', 'en-GB'); localStorage.removeItem('baiagent-language'); return true; })()");
+  await call('cdp', { method: 'Page.reload', params: { ignoreCache: true } });
+  await new Promise(resolve => setTimeout(resolve, 650));
+  assert.equal(await evaluate('window.baiagentI18n?.currency'), 'GBP', 'Региональная валюта en-GB не должна сломаться');
   await evaluate("(() => { localStorage.removeItem('baiagent-language'); localStorage.removeItem('__test_locale'); return true; })()");
   await call('cdp', { method: 'Emulation.clearDeviceMetricsOverride', params: {} });
   await writeFile(path.join(output, 'i18n-results.json'), JSON.stringify({ conclusion: 'success', manual, results }, null, 2));
